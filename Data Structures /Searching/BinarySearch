@@ -1,4 +1,4 @@
-// Binary Search
+// Binary Search code in C
 
 #include<stdio.h>
 #include<conio.h>
