@@ -1,4 +1,4 @@
-// Fibonacci Search
+// Fibonacci Search code in C
 
 #include<stdio.h>
 #include<conio.h>
