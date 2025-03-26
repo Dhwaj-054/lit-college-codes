@@ -1,4 +1,4 @@
-# this is the code in C for Strassen Matrix Multiplication
+//this is the code in C for Strassen Matrix Multiplication
 
 #include <stdio.h>
 #include<conio.h>
