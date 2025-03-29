@@ -1,127 +1,124 @@
-@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Poppins:wght@700&display=swap');
 
 body {
-	font-family: Arial, sans-serif;
-	margin: 0px;
-	padding: 20px;
-	background-color: #040C18;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #2D1B55; /* Dark deep purple */
+    color: #F5E8C7; /* Beige yellow */
 }
 
 header {
-	margin: 4px;
-	padding: 4px;
-	text-align: right;
-	border-bottom: 1px solid #1E2027;
+    margin: 4px;
+    padding: 10px;
+    text-align: right;
+    border-bottom: 2px solid #654EA3;
 }
 
 header a {
-	padding: 8px;
-	text-decoration: none;
-	color: #BAD7E3;
+    padding: 10px;
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: bold;
 }
 header a:hover {
-	color: #86CEE5;
+    color: #F5E8C7;
 }
 
 main {
-	margin: 0 auto;
-	padding: 16px;
-	max-width: 800px;
-	color: #D9E0E3;
-	text-align: center;
+    margin: 0 auto;
+    padding: 20px;
+    max-width: 800px;
+    text-align: center;
+    background-color: rgba(45, 27, 85, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 0 20px #654EA3;
 }
 
 #profile-pic {
-	margin: 0px;
-	padding: 4px;
-	max-width: 240px;
-	max-height: 240px;
-	border-radius: 50%;
-	border-color: #BAD7E3;
-	border-bottom: 4px;
-	border-top: 0;
-	border-left: 0;
-	border-right: 0;
-	border-style: solid;
-	box-shadow: 0 0 10px #86CEE4;
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 50%;
+    border: 4px solid #F5E8C7;
+    box-shadow: 0 0 10px #654EA3;
 }
 
 h1 {
-	margin: 0;
-	font-family: "Homemade Apple", serif;
-	font-weight: 400;
-	font-style: normal;
-	color: #FFFFFF;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-size: 36px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.3);
 }
 
 #main-section {
-	margin: 0;
-	padding: 16px;
-	border-radius: 40px;
-	background-color: rgba(30, 38, 50, 0.4);
-	height: fit-content;
-	text-align: left;
-	color: #a8d5e3;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    text-align: left;
 }
 
 #main-section h2 {
-	color: #FFFFFF;
-	border-bottom: 1px solid #D9E0E3;
+    color: #FFFFFF;
+    border-bottom: 2px solid #F5E8C7;
+    padding-bottom: 5px;
 }
 
 #about-me, #education, #skills, #experience, #contact {
-	padding: 16px 8px;
+    padding: 16px 12px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
 }
 
-#about-me p {
-	text-align: justify;
+#about-me p, #experience p {
+    text-align: justify;
+    font-size: 17px;
+    line-height: 1.6;
 }
 
 #education h4 {
-	display: inline-block;
-	width: 50%;
-	margin: 8px 0px;
-	border-bottom: 0.05em dotted #1E2632;
-	color: #BAD7E3;
+    display: inline-block;
+    width: 60%;
+    color: #F5E8C7;
 }
 #education p {
-	display: inline-block;
-	width: 40%;
-	margin: 8px 0px;
-	border-bottom: 0.05em dotted #1E2632;
-	text-align: right;
-	color: #86CEE4;
+    display: inline-block;
+    width: 35%;
+    text-align: right;
+    color: #E6CBA8;
 }
 
 #skills {
-	text-align: center;
-}
-#skills h2 {
-	text-align: left;
+    text-align: left;
+    padding: 16px;
 }
 
-#experience h4 {
-	padding: 4px auto;
-	color: #BAD7E3;
-	border-bottom: 1px solid #1E2632;
+#skills h3 {
+    color: #FFFFFF;
+    font-size: 22px;
+    margin-top: 10px;
+    border-bottom: 2px solid #F5E8C7;
+    padding-bottom: 5px;
 }
-#experience p {
-	padding: 4px auto;
-	text-align: justify;
-	color: #86CEE4;
+
+#skills ul {
+    list-style-type: square;
+    padding-left: 20px;
+    font-size: 18px;
+    color: #E6CBA8;
 }
 
 #contact {
-	text-align: center;
-}
-#contact h2 {
-	text-align: left;
+    text-align: center;
 }
 #contact a {
-	text-decoration: none;
-	padding: 4px;
+    text-decoration: none;
+    padding: 4px;
 }
 #contact a:hover>img {
-	transform: scale(1.1);
+    transform: scale(1.1);
 }
