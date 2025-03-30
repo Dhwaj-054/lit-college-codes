@@ -1,0 +1,60 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #87CEEB; /* Sky Blue */
+    font-family: "Courier New", monospace;
+}
+
+#container {
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-bottom: 270px solid black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#container h1 {
+    position: absolute;
+    top: -120px;
+    color: black;
+    font-size: 28px;
+    text-align: center;
+}
+
+#counter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 70px;
+}
+
+#counter-value {
+    font-size: 40px;
+    color: white;
+    margin: 0 20px;
+    font-weight: bold;
+}
+
+button {
+    background: white;
+    border: 3px solid black;
+    color: black;
+    padding: 15px 30px;
+    font-size: 24px;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+button:hover {
+    background: black;
+    color: white;
+}
