@@ -1,1 +1,1 @@
-Simple registration form using HTML and CSS code for Web Development.
+Simple registration form using HTML, JavaScript and CSS code for Web Development.
