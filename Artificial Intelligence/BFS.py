@@ -1,4 +1,4 @@
-#this contains the Breadth First Search algorithm code in Python language for the topic of AI 
+#this contains the Breadth First Search algorithm code in Python language for the topic of AI using graph input
 
 print("BFS")
 from collections import deque
