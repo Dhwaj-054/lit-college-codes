@@ -1,0 +1,292 @@
+// ============= INTERFACES (Abstractions) =============
+
+interface IMoodAnalyzer {
+    Mood analyze(String input);
+}
+
+interface IPlaylistGenerator {
+    Playlist generate(Mood mood, int songCount);
+}
+
+interface IMoodTransformer {
+    Mood transform(Mood currentMood, TransformationType type);
+}
+
+interface IMusicRepository {
+    List<Song> findByMoodCriteria(MoodCriteria criteria);
+}
+
+// ============= MODELS =============
+
+class Mood {
+    double valence;      // -1 to 1 (negative to positive)
+    double energy;       // 0 to 1 (calm to energetic)
+    List<String> tags;   // ["sad", "melancholic", etc.]
+}
+
+class Song {
+    String id;
+    String title;
+    String artist;
+    double valence;
+    double energy;
+    List<String> moodTags;
+}
+
+class Playlist {
+    String name;
+    List<Song> songs;
+    Mood moodProfile;
+}
+
+enum TransformationType {
+    ENERGIZE, CALM, UPLIFT, FOCUS
+}
+
+// ============= IMPLEMENTATIONS =============
+
+// Single Responsibility: Only analyzes mood from keywords
+class KeywordMoodAnalyzer implements IMoodAnalyzer {
+    private Map<String, MoodWeights> keywordMap;
+    
+    Mood analyze(String input) {
+        // Extract keywords from input
+        keywords = extractKeywords(input);
+        
+        // Calculate mood metrics
+        valence = calculateValence(keywords);
+        energy = calculateEnergy(keywords);
+        tags = identifyTags(keywords);
+        
+        return new Mood(valence, energy, tags);
+    }
+}
+
+// Single Responsibility: Only generates playlists
+class MoodBasedPlaylistGenerator implements IPlaylistGenerator {
+    private IMusicRepository musicRepository;
+    
+    // Dependency Inversion: Depends on abstraction
+    MoodBasedPlaylistGenerator(IMusicRepository repository) {
+        this.musicRepository = repository;
+    }
+    
+    Playlist generate(Mood mood, int songCount) {
+        // Create search criteria from mood
+        criteria = new MoodCriteria(mood.valence, mood.energy, mood.tags);
+        
+        // Fetch matching songs
+        songs = musicRepository.findByMoodCriteria(criteria);
+        
+        // Rank and select top songs
+        selectedSongs = rankAndSelect(songs, songCount);
+        
+        return new Playlist("Mood Playlist", selectedSongs, mood);
+    }
+}
+
+// Open/Closed: Can add new transformers without modifying existing code
+class EnergizingTransformer implements IMoodTransformer {
+    Mood transform(Mood currentMood, TransformationType type) {
+        if (type == TransformationType.ENERGIZE) {
+            return new Mood(
+                currentMood.valence + 0.2,
+                currentMood.energy + 0.3,
+                addTag(currentMood.tags, "energetic")
+            );
+        }
+        return currentMood;
+    }
+}
+
+class CalmingTransformer implements IMoodTransformer {
+    Mood transform(Mood currentMood, TransformationType type) {
+        if (type == TransformationType.CALM) {
+            return new Mood(
+                currentMood.valence,
+                currentMood.energy - 0.4,
+                addTag(currentMood.tags, "calm")
+            );
+        }
+        return currentMood;
+    }
+}
+
+// Single Responsibility: Only handles data access
+class InMemoryMusicRepository implements IMusicRepository {
+    private List<Song> songs;
+    
+    List<Song> findByMoodCriteria(MoodCriteria criteria) {
+        return songs.stream()
+            .filter(song -> matchesCriteria(song, criteria))
+            .collect(Collectors.toList());
+    }
+    
+    private boolean matchesCriteria(Song song, MoodCriteria criteria) {
+        // Check valence range
+        // Check energy range
+        // Check tag overlap
+        return true;
+    }
+}
+
+// ============= SERVICE LAYER =============
+
+// Orchestrates the workflow
+class PlaylistService {
+    private IMoodAnalyzer moodAnalyzer;
+    private IPlaylistGenerator playlistGenerator;
+    private IMoodTransformer moodTransformer;
+    
+    // Dependency Inversion: All dependencies are abstractions
+    PlaylistService(
+        IMoodAnalyzer analyzer,
+        IPlaylistGenerator generator,
+        IMoodTransformer transformer
+    ) {
+        this.moodAnalyzer = analyzer;
+        this.playlistGenerator = generator;
+        this.moodTransformer = transformer;
+    }
+    
+    Playlist createPlaylistFromMood(String moodInput, int songCount) {
+        // Analyze mood
+        mood = moodAnalyzer.analyze(moodInput);
+        
+        // Generate playlist
+        playlist = playlistGenerator.generate(mood, songCount);
+        
+        return playlist;
+    }
+    
+    Playlist createTransformedPlaylist(
+        String moodInput, 
+        TransformationType transformation,
+        int songCount
+    ) {
+        // Analyze mood
+        mood = moodAnalyzer.analyze(moodInput);
+        
+        // Transform mood
+        transformedMood = moodTransformer.transform(mood, transformation);
+        
+        // Generate playlist with transformed mood
+        playlist = playlistGenerator.generate(transformedMood, songCount);
+        
+        return playlist;
+    }
+}
+
+// ============= API CONTROLLERS =============
+
+@RestController
+@RequestMapping("/api")
+class PlaylistController {
+    private PlaylistService playlistService;
+    
+    PlaylistController(PlaylistService service) {
+        this.playlistService = service;
+    }
+    
+    @PostMapping("/mood/analyze")
+    Response analyzeMood(@RequestBody MoodRequest request) {
+        playlist = playlistService.createPlaylistFromMood(
+            request.moodInput,
+            request.songCount
+        );
+        return Response.ok(playlist);
+    }
+    
+    @PostMapping("/playlist/transform")
+    Response transformPlaylist(@RequestBody TransformRequest request) {
+        playlist = playlistService.createTransformedPlaylist(
+            request.moodInput,
+            request.transformation,
+            request.songCount
+        );
+        return Response.ok(playlist);
+    }
+}
+
+// ============= DEPENDENCY INJECTION SETUP =============
+
+class AppConfig {
+    
+    @Bean
+    IMusicRepository musicRepository() {
+        return new InMemoryMusicRepository();
+    }
+    
+    @Bean
+    IMoodAnalyzer moodAnalyzer() {
+        return new KeywordMoodAnalyzer();
+    }
+    
+    @Bean
+    IPlaylistGenerator playlistGenerator(IMusicRepository repository) {
+        return new MoodBasedPlaylistGenerator(repository);
+    }
+    
+    @Bean
+    IMoodTransformer moodTransformer() {
+        // Could use a composite of multiple transformers
+        return new EnergizingTransformer();
+    }
+    
+    @Bean
+    PlaylistService playlistService(
+        IMoodAnalyzer analyzer,
+        IPlaylistGenerator generator,
+        IMoodTransformer transformer
+    ) {
+        return new PlaylistService(analyzer, generator, transformer);
+    }
+}
+
+// ============= MAIN APPLICATION =============
+
+class MoodPlaylistApplication {
+    public static void main(String[] args) {
+        // Spring Boot would handle this
+        SpringApplication.run(MoodPlaylistApplication.class, args);
+    }
+}
+
+
+
+
+
+
+
+
+SOLID Principles Demonstrated:
+
+Single Responsibility: Each class has one reason to change
+
+KeywordMoodAnalyzer - only mood analysis
+MoodBasedPlaylistGenerator - only playlist generation
+InMemoryMusicRepository - only data access
+
+
+Open/Closed: Easy to extend without modification
+
+Add new IMoodAnalyzer implementations (ML-based, sentiment-based)
+Add new IMoodTransformer types (UpliftingTransformer, FocusingTransformer)
+
+
+Liskov Substitution: All implementations are interchangeable
+
+Any IMoodAnalyzer can replace another
+Any IPlaylistGenerator works the same way
+
+
+Interface Segregation: Focused, minimal interfaces
+
+Separate interfaces for each concern
+No class implements unused methods
+
+
+Dependency Inversion: Depend on abstractions
+
+All dependencies are interfaces
+Concrete classes injected at runtime
